@@ -5,8 +5,6 @@
 layout: default
 ---
 
-# Online Appendix
-
 We provide links to the GitHub repositories that include the code for the graphics that are included in the paper. We also provide a link to an interactive plot for our partisan case.
 
 ## Code for the graphics
