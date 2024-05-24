@@ -5,15 +5,15 @@
 layout: default
 ---
 
-We provide links to the GitHub repositories that include the code for the graphics that are included in the paper. We also provide a link to an interactive plot for our partisan case.
+We provide links to the GitHub repositories that include the code for the graphics that are included in the paper. We also provide links to interactive plots comparing two families of benefit functions and showing consistent strategies for a wide range of model parameters in our partisan case.
 
 ## Code for the graphics
-The code for generating the graphics and the interactive plots can be found here: [GitHub repository](https://github.com/Konrad982/homo-moralis-turnout)
+The code for generating the graphics in the paper as well as for the interactive plots cited below can be found here: [GitHub repository](https://github.com/Konrad982/homo-moralis-turnout)
 
 ## Interactive plots
-The interactive best-response (consistent strategies) plot for the partisan case with uniform cost can be found here: [Heroku App for Uniform Cost](https://homo-moralis-interactive-tool-005ed7c008c4.herokuapp.com/ex_post_vis_uniform)
+The interactive consistent strategies plot for the partisan case with uniform cost can be found here: [Heroku App for Uniform Cost](https://homo-moralis-interactive-tool-005ed7c008c4.herokuapp.com/ex_post_vis_uniform)
 
-The interactive best-response (consistent strategies) plot for the partisan case with other-than-uniform cost can be found here: [Heroku App for Other Cost](https://homo-moralis-interactive-tool-005ed7c008c4.herokuapp.com/ex_post_vis_other_cost)
+The interactive consistent strategies plot for the partisan case with other-than-uniform cost can be found here: [Heroku App for Other Cost](https://homo-moralis-interactive-tool-005ed7c008c4.herokuapp.com/ex_post_vis_other_cost)
 
 An interactive plot comparing two parametric families of benefit functions can be found here: [Heroku App for Benefit Functions](https://homo-moralis-interactive-tool-005ed7c008c4.herokuapp.com/arctan_vs_gamma)
 
