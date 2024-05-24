@@ -5,7 +5,7 @@
 layout: default
 ---
 
-We provide links to the GitHub repositories that include the code for the graphics that are included in the paper. We also provide links to interactive plots comparing two families of benefit functions and showing consistent strategies for a wide range of model parameters in our partisan case.
+We provide a link to the GitHub repository that includes the code for the graphics that are included in the paper. We also provide links to interactive plots comparing two families of benefit functions and showing consistent strategies for a wide range of model parameters in our partisan case.
 
 ## Code for the graphics
 The code for generating the graphics in the paper as well as for the interactive plots cited below can be found here: [GitHub repository](https://github.com/Konrad982/homo-moralis-turnout)
