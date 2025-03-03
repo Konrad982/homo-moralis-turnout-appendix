@@ -2,6 +2,7 @@ import * as React from "react"
 
 import Layout from "../components/layout"
 import Seo from "../components/seo"
+import { Link } from "gatsby"
 // import * as styles from "../components/index.module.css"
 
 const IndexPage = () => (
@@ -21,12 +22,12 @@ const IndexPage = () => (
       </p>
       <h2>Interactive plots</h2>
       <p>
-        We provide <a href="/plots#tab1">an interactive plot</a> showing
+        We provide <Link to="/plots#tab1">an interactive plot</Link> showing
         consistent strategies for a wide range of model parameters in our
         partisan case.
       </p>
       <p>
-        Moreover, we provide <a href="/plots#tab2">an interactive plot</a> that
+        Moreover, we provide <Link to="/plots#tab2">an interactive plot</Link> that
         compares our choice of the power-sharing function with the one used by
         Herrera, Morelli and Nunnari (2016) [2].
       </p>
