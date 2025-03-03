@@ -136,9 +136,9 @@ const ConsistentStrategies = () => {
               <input
                 type="range"
                 id="m"
-                min="0.1"
-                max="1000"
-                step="0.1"
+                min="0.01"
+                max="100"
+                step="0.01"
                 value={m}
                 onChange={handleSliderChange(setM)}
               />
@@ -152,7 +152,7 @@ const ConsistentStrategies = () => {
                 type="range"
                 id="gamma"
                 min="1.0"
-                max="100.0"
+                max="10.0"
                 step="0.01"
                 value={gamma}
                 onChange={handleSliderChange(setGamma)}
