@@ -5,9 +5,6 @@ import Latex from "react-latex-next"
 import "katex/dist/katex.min.css"
 
 const ConsistentStrategies = () => {
-  if (typeof window === 'undefined') {
-    return null;
-  }
   const [m, setM] = useState(1)
   const [theA, setTheA] = useState(1)
   const [theB, setTheB] = useState(1)
@@ -21,9 +18,7 @@ const ConsistentStrategies = () => {
   const [data, setData] = useState({ x: [], y: [] })
   const [data2, setData2] = useState({ x: [], y: [] })
   const [abline, setAbline] = useState({ x: [], y: [] })
-  const [isHorizontal, setIsHorizontal] = useState(
-    window.innerWidth > window.innerHeight,
-  )
+  const [isHorizontal, setIsHorizontal] = useState(typeof window === 'undefined' ? true : window.innerWidth > window.innerHeight)
   const [benefit, setBenefit] = useState({ x: [], y: [] })
   const [cost, setCost] = useState({ x: [], y: [] })
   const [CDF, setCDF] = useState({ x: [], y: [] })
@@ -120,7 +115,12 @@ const ConsistentStrategies = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsHorizontal(window.innerWidth > window.innerHeight)
+      if (typeof window === 'undefined') {
+        setIsHorizontal(true);
+      }
+      else {
+        setIsHorizontal(window.innerWidth > window.innerHeight)
+      }
     }
 
     window.addEventListener("resize", handleResize)

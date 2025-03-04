@@ -5,15 +5,9 @@ import Latex from "react-latex-next"
 import "katex/dist/katex.min.css"
 
 const ConsistentStrategies = () => {
-  if (typeof window === 'undefined') {
-    return null;
-  }
-
   const [m, setM] = useState(1)
   const [gamma, setGamma] = useState(1)
-  const [isHorizontal, setIsHorizontal] = useState(
-    window.innerWidth > window.innerHeight,
-  )
+  const [isHorizontal, setIsHorizontal] = useState(typeof window === 'undefined' ? true : window.innerWidth > window.innerHeight)
   const [mData, setmData] = useState({ x: [], y: [] })
   const [gammaData, setGammaData] = useState({ x: [], y: [] })
 
@@ -41,7 +35,12 @@ const ConsistentStrategies = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsHorizontal(window.innerWidth > window.innerHeight)
+      if (typeof window === 'undefined') {
+        setIsHorizontal(true);
+      }
+      else {
+        setIsHorizontal(window.innerWidth > window.innerHeight)
+      }
     }
 
     window.addEventListener("resize", handleResize)
