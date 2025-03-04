@@ -21,7 +21,13 @@ const Layout = ({ children }) => {
   `)
 
   return (
-    <>
+    <div
+      style={{
+        margin: `0 auto`,
+        maxWidth: `var(--size-content)`,
+        padding: `var(--size-gutter)`,
+      }}
+    >
       <div style={{ marginTop: "30px" }}>
         <header>
           <h1 style={{ textAlign: "center" }}>
@@ -49,55 +55,46 @@ const Layout = ({ children }) => {
           </nav>
         </header>
       </div>
-
-      <div
+      <main>{children}</main>
+      <footer
         style={{
-          margin: `0 auto`,
-          maxWidth: `var(--size-content)`,
-          padding: `var(--size-gutter)`,
+          marginTop: `var(--space-5)`,
+          fontSize: `var(--font-sm)`,
         }}
       >
-        <main>{children}</main>
-        <footer
-          style={{
-            marginTop: `var(--space-5)`,
-            fontSize: `var(--font-sm)`,
-          }}
-        >
-          <p>
-            © {new Date().getFullYear()} Konrad Dierks &middot; Built with
-            {` `}
-            <a href="https://www.gatsbyjs.com">Gatsby</a>
-          </p>
-          <p>
-            Source code:{" "}
-            <a href="https://github.com/Konrad982/homo-moralis-turnout-appendix">
-              https://github.com/Konrad982/homo-moralis-turnout-appendix
-            </a>
-          </p>
-          <p>
-            The webpage icon "
-            <a href="https://commons.wikimedia.org/w/index.php?curid=157180000">
-              Arcticons-black emoji ballot box with ballot
-            </a>
-            " by Arcticons Team is licensed under{" "}
-            <a
-              rel="noopener noreferrer"
-              href="https://creativecommons.org/licenses/by-sa/4.0/?ref=openverse"
-            >
-              CC BY-SA 4.0{" "}
-            </a>
-            .
-          </p>
-          <p>
-            Contact:{" "}
-            <a href="mailto:konrad.dierks@googlemail.com">
-              konrad.dierks@googlemail.com
-            </a>
-          </p>
-        </footer>
-      </div>
-    </>
+        <p>
+          © {new Date().getFullYear()} Konrad Dierks &middot; Built with
+          {` `}
+          <a href="https://www.gatsbyjs.com">Gatsby</a>
+        </p>
+        <p>
+          Source code:{" "}
+          <a href="https://github.com/Konrad982/homo-moralis-turnout-appendix">
+            https://github.com/Konrad982/homo-moralis-turnout-appendix
+          </a>
+        </p>
+        <p>
+          The webpage icon "
+          <a href="https://commons.wikimedia.org/w/index.php?curid=157180000">
+            Arcticons-black emoji ballot box with ballot
+          </a>
+          " by Arcticons Team is licensed under{" "}
+          <a
+            rel="noopener noreferrer"
+            href="https://creativecommons.org/licenses/by-sa/4.0/?ref=openverse"
+          >
+            CC BY-SA 4.0{" "}
+          </a>
+          .
+        </p>
+        <p>
+          Contact:{" "}
+          <a href="mailto:konrad.dierks@googlemail.com">
+            konrad.dierks@googlemail.com
+          </a>
+        </p>
+      </footer>
+    </div>
   )
 }
 

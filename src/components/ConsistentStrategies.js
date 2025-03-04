@@ -149,7 +149,7 @@ const ConsistentStrategies = () => {
     display: "flex",
     flexDirection: "row",
     width: "100%",
-    height: isHorizontal ? "30vh" : "35vw",
+    height: isHorizontal ? "calc(var(--size-content) * 0.35)" : "35vw",
     padding: "0px",
   }
 
@@ -197,11 +197,34 @@ const ConsistentStrategies = () => {
   }
 
   const plotlyLayout = {
-    title: "Polynomial Plot",
-    margin: { t: 10, r: 10, b: 20, l: 30 },
+    margin: { t: 10, r: 10, b: 20, l: 20 },
+  }
+
+  const plotlyLayout2 = {
     legend: isHorizontal
       ? { x: 1, y: 1, xanchor: "left" }
       : { x: 1, xanchor: "right", y: 1 },
+      xaxis: {
+        title: {
+          text: "a",
+          font: {
+            size: 12,
+            color: "black",
+          },
+        },
+        automargin: true,
+      },
+      yaxis: {
+        title: {
+          text: "b",
+          font: {
+            size: 12,
+            color: "black",
+          },
+        },
+        automargin: true,
+      },
+    margin: { t: 10, r: 10, b: 20, l: 20 },
   }
 
   const traces = [
@@ -303,14 +326,14 @@ const ConsistentStrategies = () => {
         >
           <Plot
             data={traces}
-            layout={plotlyLayout}
+            layout={plotlyLayout2}
             useResizeHandler={true}
             style={{ width: "100%", height: "100%" }}
           />
         </div>
         <div style={controlsStyle}>
           <div>
-            <h3>Adjust Parameters:</h3>
+            <h3>Adjust Parameters: </h3>
             <div>
               <label htmlFor="m">
                 <Latex>$m$</Latex>:{" "}
