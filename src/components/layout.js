@@ -69,8 +69,8 @@ const Layout = ({ children }) => {
         </p>
         <p>
           Source code:{" "}
-          <a href="https://github.com/KonradEcon/homo-moralis-turnout-appendix">
-            https://github.com/Konrad982/homo-moralis-turnout-appendix
+          <a href="https://github.com/konradecon/homo-moralis-turnout-appendix">
+            https://github.com/KonradEcon/homo-moralis-turnout-appendix
           </a>
         </p>
         <p>
