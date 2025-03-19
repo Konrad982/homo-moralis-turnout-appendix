@@ -16,7 +16,7 @@ const IndexPage = () => (
       <h2>Code for the graphics</h2>
       <p>
         The code for generating the graphics in the paper can be found here:{" "}
-        <a href="https://github.com/Konrad982/homo-moralis-turnout">
+        <a href="https://github.com/KonradEcon/homo-moralis-turnout">
           GitHub repository
         </a>
       </p>
