@@ -137,6 +137,15 @@ const NoticePage = () => (
             <td>Matt Zabriskie</td>
           </tr>
           <tr>
+            <td>@fontsource-variable/source-sans-3</td>
+            <td>^5.0.0</td>
+            <td>OFL-1.1</td>
+            <td>
+              <a href="https://github.com/fontsource/fontsource.git">Link</a>
+            </td>
+            <td>Fontsource</td>
+          </tr>
+          <tr>
             <td>prettier</td>
             <td>2.8.8</td>
             <td>MIT</td>

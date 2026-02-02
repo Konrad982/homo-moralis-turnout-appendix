@@ -28,13 +28,13 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
+        name: `Does universalization ethics justify participation in large elections? - Bonus Content`,
+        short_name: `HM Turnout Plots`,
         start_url: `/`,
-        background_color: `#663399`,
+        background_color: `#ffffff`,
         // This will impact how browsers show your PWA/website
         // https://css-tricks.com/meta-theme-color-and-trickery/
-        // theme_color: `#663399`,
+        theme_color: `#ffffff`,
         display: `minimal-ui`,
         icon: `src/images/Arcticons-black_emoji_ballot_box_with_ballot.svg`, // This path is relative to the root of the site.
       },

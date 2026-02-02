@@ -15,6 +15,7 @@
 | react-plotly.js          | 2.6.0             | MIT          | git+https://github.com/plotly/react-plotly.js.git        | Plotly, Inc.     |
 | react-latex-next         | 3.0.0             | MIT          | git+https://github.com/harunurhan/react-latex-next.git   | harunurhan       |
 | react-tabs               | 6.1.0             | MIT          | git+https://github.com/reactjs/react-tabs.git            | Matt Zabriskie   |
+| @fontsource-variable/source-sans-3 | ^5.0.0 | OFL-1.1 | git+https://github.com/fontsource/fontsource.git | Fontsource |
 | @loadable/component      | 5.16.4            | MIT          | git+https://github.com/gregberge/loadable-components.git | Greg Bergé       |
 | gh-pages                 | 6.3.0             | MIT          | git+https://github.com/tschaub/gh-pages.git              | Tim Schaub       |
 | prettier                 | 2.8.8             | MIT          | git+https://github.com/prettier/prettier.git             | James Long       |

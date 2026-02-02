@@ -18,6 +18,7 @@
     "react-latex-next": "^3.0.0",
     "react-plotly.js": "^2.6.0",
     "react-tabs": "^6.1.0",
+    "@fontsource-variable/source-sans-3": "^5.0.0",
     "@loadable/component": "^5.16.4"
   },
   "devDependencies": {
@@ -35,9 +36,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
-  },
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/KonradEcon/homo-moralis-turnout-appendix"
   }
 }
