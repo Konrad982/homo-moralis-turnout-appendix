@@ -89,8 +89,8 @@ const Layout = ({ children }) => {
         </p>
         <p>
           Contact:{" "}
-          <a href="mailto:konrad.dierks@googlemail.com">
-            konrad.dierks@googlemail.com
+          <a href="mailto:konrad.dierks@ecomail.fr">
+            konrad.dierks@ecomail.fr
           </a>
         </p>
       </footer>

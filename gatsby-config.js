@@ -8,7 +8,6 @@
  * @type {import('gatsby').GatsbyConfig}
  */
 module.exports = {
-  pathPrefix: "/homo-moralis-turnout-appendix",
   siteMetadata: {
     title: `Does universalization ethics justify participation in large elections? - Bonus Content`,
     description: `Bonus content around the Homo Moralis turnout paper`,
