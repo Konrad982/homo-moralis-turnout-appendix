@@ -93,6 +93,7 @@ const Layout = ({ children }) => {
             konrad.dierks@ecomail.fr
           </a>
         </p>
+        <p>Hosted on GitHub Pages.</p>
       </footer>
     </div>
   )
