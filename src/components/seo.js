@@ -6,7 +6,7 @@
  */
 
 import * as React from "react"
-import { useStaticQuery, graphql } from "gatsby"
+import { useStaticQuery, graphql, withPrefix } from "gatsby"
 
 function Seo({ description, title, children }) {
   const { site } = useStaticQuery(graphql`
@@ -23,6 +23,8 @@ function Seo({ description, title, children }) {
 
   const metaDescription = description || site.siteMetadata.description
   const defaultTitle = site.siteMetadata?.title
+  const iconLight = withPrefix("/favicon-light.svg")
+  const iconDark = withPrefix("/favicon-dark.svg")
 
   return (
     <>
@@ -35,6 +37,18 @@ function Seo({ description, title, children }) {
       <meta name="twitter:creator" content={site.siteMetadata?.author || ``} />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={metaDescription} />
+      <link
+        rel="icon"
+        type="image/svg+xml"
+        href={iconLight}
+        media="(prefers-color-scheme: light)"
+      />
+      <link
+        rel="icon"
+        type="image/svg+xml"
+        href={iconDark}
+        media="(prefers-color-scheme: dark)"
+      />
       {children}
     </>
   )

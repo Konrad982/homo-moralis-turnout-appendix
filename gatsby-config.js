@@ -36,7 +36,7 @@ module.exports = {
         // https://css-tricks.com/meta-theme-color-and-trickery/
         theme_color: `#ffffff`,
         display: `minimal-ui`,
-        icon: `src/images/Arcticons-black_emoji_ballot_box_with_ballot.svg`, // This path is relative to the root of the site.
+        icon: `static/favicon-light.svg`, // This path is relative to the root of the site.
       },
     },
   ],

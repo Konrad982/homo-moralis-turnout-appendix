@@ -85,7 +85,7 @@ const Layout = ({ children }) => {
           >
             CC BY-SA 4.0{" "}
           </a>
-          .
+          . On dark browser theme: modified for color inversion.
         </p>
         <p>
           Contact:{" "}
