@@ -47,46 +47,6 @@ const NoticePage = () => {
               <td style={cellStyle}>Kyle Mathews</td>
             </tr>
             <tr>
-              <td style={cellStyle}>gatsby-plugin-image</td>
-              <td style={cellStyle}>MIT</td>
-              <td style={cellStyle}>
-                <a href="https://github.com/gatsbyjs/gatsby.git">Link</a>
-              </td>
-              <td style={cellStyle}>Matt Kane</td>
-            </tr>
-            <tr>
-              <td style={cellStyle}>gatsby-plugin-manifest</td>
-              <td style={cellStyle}>MIT</td>
-              <td style={cellStyle}>
-                <a href="https://github.com/gatsbyjs/gatsby.git">Link</a>
-              </td>
-              <td style={cellStyle}>Kyle Mathews</td>
-            </tr>
-            <tr>
-              <td style={cellStyle}>gatsby-plugin-sharp</td>
-              <td style={cellStyle}>MIT</td>
-              <td style={cellStyle}>
-                <a href="https://github.com/gatsbyjs/gatsby.git">Link</a>
-              </td>
-              <td style={cellStyle}>Kyle Mathews</td>
-            </tr>
-            <tr>
-              <td style={cellStyle}>gatsby-source-filesystem</td>
-              <td style={cellStyle}>MIT</td>
-              <td style={cellStyle}>
-                <a href="https://github.com/gatsbyjs/gatsby.git">Link</a>
-              </td>
-              <td style={cellStyle}>Kyle Mathews</td>
-            </tr>
-            <tr>
-              <td style={cellStyle}>gatsby-transformer-sharp</td>
-              <td style={cellStyle}>MIT</td>
-              <td style={cellStyle}>
-                <a href="https://github.com/gatsbyjs/gatsby.git">Link</a>
-              </td>
-              <td style={cellStyle}>Kyle Mathews</td>
-            </tr>
-            <tr>
               <td style={cellStyle}>plotly.js</td>
               <td style={cellStyle}>MIT</td>
               <td style={cellStyle}>

@@ -4,11 +4,6 @@
 | :----------------------- | :----------- | :------------------------------------------------------- | :--------------- |
 | flo-poly                 | MIT          | git+https://github.com/FlorisSteenkamp/FloPoly.git       | Floris Steenkamp |
 | gatsby                   | MIT          | git+https://github.com/gatsbyjs/gatsby.git               | Kyle Mathews     |
-| gatsby-plugin-image      | MIT          | git+https://github.com/gatsbyjs/gatsby.git               | Matt Kane        |
-| gatsby-plugin-manifest   | MIT          | git+https://github.com/gatsbyjs/gatsby.git               | Kyle Mathews     |
-| gatsby-plugin-sharp      | MIT          | git+https://github.com/gatsbyjs/gatsby.git               | Kyle Mathews     |
-| gatsby-source-filesystem | MIT          | git+https://github.com/gatsbyjs/gatsby.git               | Kyle Mathews     |
-| gatsby-transformer-sharp | MIT          | git+https://github.com/gatsbyjs/gatsby.git               | Kyle Mathews     |
 | plotly.js                | MIT          | git+https://github.com/plotly/plotly.js.git              | Plotly, Inc.     |
 | react                    | MIT          | git+https://github.com/facebook/react.git                | n/a              |
 | react-dom                | MIT          | git+https://github.com/facebook/react.git                | n/a              |
