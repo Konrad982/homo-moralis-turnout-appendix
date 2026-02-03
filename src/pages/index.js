@@ -43,7 +43,7 @@ const IndexPage = () => (
       <p>
         1. Konrad Dierks, Ingela Alger, and Jean-François Laslier, Does
         universalization ethics justify participation in large elections?, TSE
-        Working Paper, n. 21-1193, February 2021, revised April 2024.{" "}
+        Working Paper, n. 21-1193, February 2021, revised April 2025.{" "}
         <a href="https://www.tse-fr.eu/publications/does-universalization-ethics-justify-participation-large-elections-0">
           https://www.tse-fr.eu/publications/does-universalization-ethics-justify-participation-large-elections-0
         </a>
