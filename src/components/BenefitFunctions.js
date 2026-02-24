@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react"
 import { h, h_gamma } from "./Utils.js"
 import Latex from "react-latex-next"
 import "katex/dist/katex.min.css"
+import usePrefersDark from "./usePrefersDark"
 
 const ConsistentStrategies = () => {
   const [m, setM] = useState(1)
@@ -10,6 +11,7 @@ const ConsistentStrategies = () => {
   const [isHorizontal, setIsHorizontal] = useState(typeof window === 'undefined' ? true : window.innerWidth > window.innerHeight)
   const [mData, setmData] = useState({ x: [], y: [] })
   const [gammaData, setGammaData] = useState({ x: [], y: [] })
+  const prefersDark = usePrefersDark()
 
   useEffect(() => {
     const make_h_m = () => {
@@ -32,6 +34,10 @@ const ConsistentStrategies = () => {
   const handleSliderChange = setter => e => {
     setter(parseFloat(e.target.value))
   }
+
+  const rangeStyle = (value, min, max) => ({
+    "--range-value": `${((value - min) / (max - min)) * 100}%`,
+  })
 
   useEffect(() => {
     const handleResize = () => {
@@ -81,12 +87,53 @@ const ConsistentStrategies = () => {
     boxSizing: "border-box",
   }
 
+  const plotTheme = prefersDark
+    ? {
+        background: "#0f1113",
+        text: "#f2f2f2",
+        axisLine: "rgba(255, 255, 255, 0.35)",
+        grid: "rgba(255, 255, 255, 0.12)",
+        traceA: "#c77dff",
+        traceB: "#7fd6c6",
+      }
+    : {
+        background: "#ffffff",
+        text: "#333333",
+        axisLine: "rgba(0, 0, 0, 0.25)",
+        grid: "rgba(0, 0, 0, 0.12)",
+        traceA: "#440154",
+        traceB: "#2e8f7a",
+      }
+
+  const axisBase = {
+    automargin: true,
+    tickfont: { color: plotTheme.text },
+    linecolor: plotTheme.axisLine,
+    gridcolor: plotTheme.grid,
+    zerolinecolor: plotTheme.axisLine,
+    title: {
+      font: {
+        size: 12,
+        color: plotTheme.text,
+      },
+    },
+  }
+
   const plotlyLayout = {
-    title: "Polynomial Plot",
     margin: { t: 10, r: 10, b: 20, l: 30 },
     legend: isHorizontal
-      ? { x: 1, y: 1, xanchor: "left" }
-      : { x: 1, xanchor: "right", y: 1 },
+      ? { x: 1, y: 1, xanchor: "left", font: { color: plotTheme.text } }
+      : {
+          x: 1,
+          xanchor: "right",
+          y: 1,
+          font: { color: plotTheme.text },
+        },
+    paper_bgcolor: plotTheme.background,
+    plot_bgcolor: plotTheme.background,
+    font: { color: plotTheme.text },
+    xaxis: axisBase,
+    yaxis: axisBase,
   }
 
   const traces = [
@@ -96,7 +143,7 @@ const ConsistentStrategies = () => {
       type: "scatter",
       name: "h₁(x,m)",
       mode: "lines",
-      marker: { size: 1, color: "#440154" },
+      marker: { size: 1, color: plotTheme.traceA },
     },
     {
       x: gammaData.x,
@@ -104,7 +151,7 @@ const ConsistentStrategies = () => {
       type: "scatter",
       name: "h₂(x,γ)",
       mode: "lines",
-      marker: { size: 1, color: "#5ec962" },
+      marker: { size: 1, color: plotTheme.traceB },
     },
   ]
 
@@ -128,10 +175,13 @@ const ConsistentStrategies = () => {
         <div style={controlsStyle}>
           <div>
             <h3>Adjust Parameters:</h3>
-            <div>
-              <label htmlFor="m">
-                <Latex>$m$</Latex>:{" "}
-              </label>
+            <div className="slider-control">
+              <div className="slider-label">
+                <label htmlFor="m">
+                  <Latex>$m$</Latex>:
+                </label>
+                <span className="slider-value">{m.toFixed(1)}</span>
+              </div>
               <input
                 type="range"
                 id="m"
@@ -139,14 +189,17 @@ const ConsistentStrategies = () => {
                 max="100"
                 step="0.01"
                 value={m}
+                style={rangeStyle(m, 0.01, 100)}
                 onChange={handleSliderChange(setM)}
               />
-              <span>{m.toFixed(1)}</span>
             </div>
-            <div>
-              <label htmlFor="gamma">
-                <Latex>$\gamma$</Latex>:{" "}
-              </label>
+            <div className="slider-control">
+              <div className="slider-label">
+                <label htmlFor="gamma">
+                  <Latex>$\gamma$</Latex>:
+                </label>
+                <span className="slider-value">{gamma.toFixed(2)}</span>
+              </div>
               <input
                 type="range"
                 id="gamma"
@@ -154,9 +207,9 @@ const ConsistentStrategies = () => {
                 max="10.0"
                 step="0.01"
                 value={gamma}
+                style={rangeStyle(gamma, 1.0, 10.0)}
                 onChange={handleSliderChange(setGamma)}
               />
-              <span>{gamma.toFixed(2)}</span>
             </div>
           </div>
         </div>

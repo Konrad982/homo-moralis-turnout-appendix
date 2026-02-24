@@ -130,4 +130,9 @@ const rootsUtilityA = (m, cbar, kap, k, av, a, b, a0) => {
   return allRoots(coeffs).map(root => root + a0)
 }
 
-export { findGroupBrAVecB, h, CostFun, h_gamma }
+export {
+  findGroupBrAVecB,
+  h,
+  CostFun,
+  h_gamma,
+}

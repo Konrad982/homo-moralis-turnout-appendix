@@ -9,10 +9,10 @@
  */
 module.exports = {
   siteMetadata: {
-    title: `Does universalization ethics justify participation in large elections? - Bonus Content`,
-    description: `Bonus content around the Homo Moralis turnout paper`,
-    author: `@konrad982`,
-    siteUrl: `https://konrad982.github.io`,
+    title: `Konrad Dierks`,
+    description: `Personal page`,
+    author: `Konrad Dierks`,
+    siteUrl: `https://konraddierks.eu/`,
   },
   plugins: [],
 }

@@ -8,7 +8,13 @@
 import * as React from "react"
 import { useStaticQuery, graphql, withPrefix } from "gatsby"
 
-function Seo({ description, title, children }) {
+function Seo({
+  description,
+  title,
+  children,
+  faviconLight = "/favicon-kd-light.svg",
+  faviconDark = "/favicon-kd-dark.svg",
+}) {
   const { site } = useStaticQuery(graphql`
     query {
       site {
@@ -23,8 +29,8 @@ function Seo({ description, title, children }) {
 
   const metaDescription = description || site.siteMetadata.description
   const defaultTitle = site.siteMetadata?.title
-  const iconLight = withPrefix("/favicon-light.svg")
-  const iconDark = withPrefix("/favicon-dark.svg")
+  const iconLight = withPrefix(faviconLight)
+  const iconDark = withPrefix(faviconDark)
 
   return (
     <>

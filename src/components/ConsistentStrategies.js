@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react"
 import { findGroupBrAVecB, h, CostFun } from "./Utils.js"
 import Latex from "react-latex-next"
 import "katex/dist/katex.min.css"
+import usePrefersDark from "./usePrefersDark"
 
 const ConsistentStrategies = () => {
   const [m, setM] = useState(1)
@@ -22,6 +23,7 @@ const ConsistentStrategies = () => {
   const [benefit, setBenefit] = useState({ x: [], y: [] })
   const [cost, setCost] = useState({ x: [], y: [] })
   const [CDF, setCDF] = useState({ x: [], y: [] })
+  const prefersDark = usePrefersDark()
 
   useEffect(() => {
     const makeabline = () => {
@@ -79,6 +81,10 @@ const ConsistentStrategies = () => {
   const handleSliderChange = setter => e => {
     setter(parseFloat(e.target.value))
   }
+
+  const rangeStyle = (value, min, max) => ({
+    "--range-value": `${((value - min) / (max - min)) * 100}%`,
+  })
 
   useEffect(() => {
     const calculateBenefit = () => {
@@ -196,35 +202,78 @@ const ConsistentStrategies = () => {
     boxSizing: "border-box",
   }
 
+  const plotTheme = prefersDark
+    ? {
+        background: "#0f1113",
+        text: "#f2f2f2",
+        axisLine: "rgba(255, 255, 255, 0.35)",
+        grid: "rgba(255, 255, 255, 0.12)",
+        traceA: "#c77dff",
+        traceB: "#7fd6c6",
+        raw: "rgba(255, 255, 255, 0.18)",
+        line: "#f2f2f2",
+      }
+    : {
+        background: "#ffffff",
+        text: "#333333",
+        axisLine: "rgba(0, 0, 0, 0.25)",
+        grid: "rgba(0, 0, 0, 0.12)",
+        traceA: "#440154",
+        traceB: "#2e8f7a",
+        raw: "rgba(0, 0, 0, 0.12)",
+        line: "#000000",
+      }
+
+  const axisBase = {
+    automargin: true,
+    tickfont: { color: plotTheme.text },
+    linecolor: plotTheme.axisLine,
+    gridcolor: plotTheme.grid,
+    zerolinecolor: plotTheme.axisLine,
+    title: {
+      font: {
+        size: 12,
+        color: plotTheme.text,
+      },
+    },
+  }
+
   const plotlyLayout = {
     margin: { t: 10, r: 10, b: 20, l: 20 },
+    paper_bgcolor: plotTheme.background,
+    plot_bgcolor: plotTheme.background,
+    font: { color: plotTheme.text },
+    xaxis: axisBase,
+    yaxis: axisBase,
   }
 
   const plotlyLayout2 = {
     legend: isHorizontal
-      ? { x: 1, y: 1, xanchor: "left" }
-      : { x: 1, xanchor: "right", y: 1 },
-      xaxis: {
-        title: {
-          text: "a",
-          font: {
-            size: 12,
-            color: "black",
-          },
+      ? { x: 1, y: 1, xanchor: "left", font: { color: plotTheme.text } }
+      : {
+          x: 1,
+          xanchor: "right",
+          y: 1,
+          font: { color: plotTheme.text },
         },
-        automargin: true,
+    xaxis: {
+      ...axisBase,
+      title: {
+        ...axisBase.title,
+        text: "a",
       },
-      yaxis: {
-        title: {
-          text: "b",
-          font: {
-            size: 12,
-            color: "black",
-          },
-        },
-        automargin: true,
+    },
+    yaxis: {
+      ...axisBase,
+      title: {
+        ...axisBase.title,
+        text: "b",
       },
+    },
     margin: { t: 10, r: 10, b: 20, l: 20 },
+    paper_bgcolor: plotTheme.background,
+    plot_bgcolor: plotTheme.background,
+    font: { color: plotTheme.text },
   }
 
   const traces = [
@@ -234,7 +283,7 @@ const ConsistentStrategies = () => {
       type: "scatter",
       name: "A-consistent strategies",
       mode: "markers",
-      marker: { size: 1, color: "#440154" },
+      marker: { size: 1, color: plotTheme.traceA },
       showlegend: false,
       legendgroup: "Polynomial",
     },
@@ -244,7 +293,7 @@ const ConsistentStrategies = () => {
       type: "scatter",
       name: "B-consistent strategies",
       mode: "markers",
-      marker: { size: 1, color: "#5ec962" },
+      marker: { size: 1, color: plotTheme.traceB },
       showlegend: false,
       legendgroup: "Polynomial 2",
     },
@@ -254,7 +303,7 @@ const ConsistentStrategies = () => {
       type: "scatter",
       name: "B-consistent",
       mode: "lines",
-      marker: { size: 1, color: "#5ec962" },
+      marker: { size: 1, color: plotTheme.traceB },
       showlegend: true,
       legendgroup: "Polynomial 2",
     },
@@ -264,7 +313,7 @@ const ConsistentStrategies = () => {
       type: "scatter",
       name: "A-consistent",
       mode: "lines",
-      marker: { size: 1, color: "#440154" },
+      marker: { size: 1, color: plotTheme.traceA },
       showlegend: true,
       legendgroup: "Polynomial",
     },
@@ -274,7 +323,7 @@ const ConsistentStrategies = () => {
       type: "scatter",
       name: "a=b",
       mode: "lines",
-      line: { color: "black", dash: "dash", width: 1 },
+      line: { color: plotTheme.line, dash: "dash", width: 1 },
     },
   ]
 
@@ -285,7 +334,7 @@ const ConsistentStrategies = () => {
       type: "scatter",
       name: "Benefit function",
       mode: "lines",
-      marker: { size: 1, color: "black" },
+      marker: { size: 1, color: plotTheme.line },
       showlegend: false,
     },
   ]
@@ -297,7 +346,7 @@ const ConsistentStrategies = () => {
       type: "scatter",
       name: "Cost function",
       mode: "lines",
-      marker: { size: 1, color: "black" },
+      marker: { size: 1, color: plotTheme.line },
       showlegend: false,
     },
   ]
@@ -309,7 +358,7 @@ const ConsistentStrategies = () => {
       type: "scatter",
       name: "CDF",
       mode: "lines",
-      marker: { size: 1, color: "black" },
+      marker: { size: 1, color: plotTheme.line },
       showlegend: false,
     },
   ]
@@ -334,10 +383,13 @@ const ConsistentStrategies = () => {
         <div style={controlsStyle}>
           <div>
             <h3>Adjust Parameters: </h3>
-            <div>
-              <label htmlFor="m">
-                <Latex>$m$</Latex>:{" "}
-              </label>
+            <div className="slider-control">
+              <div className="slider-label">
+                <label htmlFor="m">
+                  <Latex>$m$</Latex>:
+                </label>
+                <span className="slider-value">{m.toFixed(2)}</span>
+              </div>
               <input
                 type="range"
                 id="m"
@@ -345,14 +397,17 @@ const ConsistentStrategies = () => {
                 max="100"
                 step="0.01"
                 value={m}
+                style={rangeStyle(m, 0.01, 100)}
                 onChange={handleSliderChange(setM)}
               />
-              <span>{m.toFixed(2)}</span>
             </div>
-            <div>
-              <label htmlFor="k">
-                <Latex>$k$</Latex>:{" "}
-              </label>
+            <div className="slider-control">
+              <div className="slider-label">
+                <label htmlFor="k">
+                  <Latex>$k$</Latex>:
+                </label>
+                <span className="slider-value">{k.toFixed(0)}</span>
+              </div>
               <input
                 type="range"
                 id="k"
@@ -360,14 +415,17 @@ const ConsistentStrategies = () => {
                 max="10"
                 step="1"
                 value={k}
+                style={rangeStyle(k, 1, 10)}
                 onChange={handleSliderChange(setK)}
               />
-              <span>{k.toFixed(0)}</span>
             </div>
-            <div>
-              <label htmlFor="kap">
-                <Latex>$\kappa$</Latex>:{" "}
-              </label>
+            <div className="slider-control">
+              <div className="slider-label">
+                <label htmlFor="kap">
+                  <Latex>$\kappa$</Latex>:
+                </label>
+                <span className="slider-value">{kap.toFixed(2)}</span>
+              </div>
               <input
                 type="range"
                 id="kap"
@@ -375,14 +433,17 @@ const ConsistentStrategies = () => {
                 max="1"
                 step="0.01"
                 value={kap}
+                style={rangeStyle(kap, 0.01, 1)}
                 onChange={handleSliderChange(setKap)}
               />
-              <span>{kap.toFixed(2)}</span>
             </div>
-            <div>
-              <label htmlFor="rho">
-                <Latex>$\rho$</Latex>:{" "}
-              </label>
+            <div className="slider-control">
+              <div className="slider-label">
+                <label htmlFor="rho">
+                  <Latex>$\rho$</Latex>:
+                </label>
+                <span className="slider-value">{rho.toFixed(2)}</span>
+              </div>
               <input
                 type="range"
                 id="rho"
@@ -390,14 +451,17 @@ const ConsistentStrategies = () => {
                 max="10"
                 step="0.01"
                 value={rho}
+                style={rangeStyle(rho, 0.01, 10)}
                 onChange={handleSliderChange(setRho)}
               />
-              <span>{rho.toFixed(2)}</span>
             </div>
-            <div>
-              <label htmlFor="theA">
-                <Latex>$\theta_A$</Latex>:{" "}
-              </label>
+            <div className="slider-control">
+              <div className="slider-label">
+                <label htmlFor="theA">
+                  <Latex>$\theta_A$</Latex>:
+                </label>
+                <span className="slider-value">{theA.toFixed(2)}</span>
+              </div>
               <input
                 type="range"
                 id="theA"
@@ -405,14 +469,17 @@ const ConsistentStrategies = () => {
                 max="10"
                 step="0.01"
                 value={theA}
+                style={rangeStyle(theA, 0.01, 10)}
                 onChange={handleSliderChange(setTheA)}
               />
-              <span>{theA.toFixed(2)}</span>
             </div>
-            <div>
-              <label htmlFor="theB">
-                <Latex>$\theta_B$</Latex>:{" "}
-              </label>
+            <div className="slider-control">
+              <div className="slider-label">
+                <label htmlFor="theB">
+                  <Latex>$\theta_B$</Latex>:
+                </label>
+                <span className="slider-value">{theB.toFixed(2)}</span>
+              </div>
               <input
                 type="range"
                 id="theB"
@@ -420,14 +487,17 @@ const ConsistentStrategies = () => {
                 max="10"
                 step="0.01"
                 value={theB}
+                style={rangeStyle(theB, 0.01, 10)}
                 onChange={handleSliderChange(setTheB)}
               />
-              <span>{theB.toFixed(2)}</span>
             </div>
-            <div>
-              <label htmlFor="a0">
-                <Latex>$a_0$</Latex>:{" "}
-              </label>
+            <div className="slider-control">
+              <div className="slider-label">
+                <label htmlFor="a0">
+                  <Latex>$a_0$</Latex>:
+                </label>
+                <span className="slider-value">{a0.toFixed(2)}</span>
+              </div>
               <input
                 type="range"
                 id="a0"
@@ -435,14 +505,17 @@ const ConsistentStrategies = () => {
                 max="2.0"
                 step="0.01"
                 value={a0}
+                style={rangeStyle(a0, 0.01, 2.0)}
                 onChange={handleSliderChange(setA0)}
               />
-              <span>{a0.toFixed(2)}</span>
             </div>
-            <div>
-              <label htmlFor="av">
-                <Latex>$a_v$</Latex>:{" "}
-              </label>
+            <div className="slider-control">
+              <div className="slider-label">
+                <label htmlFor="av">
+                  <Latex>$a_v$</Latex>:
+                </label>
+                <span className="slider-value">{av.toFixed(2)}</span>
+              </div>
               <input
                 type="range"
                 id="av"
@@ -450,14 +523,17 @@ const ConsistentStrategies = () => {
                 max="10"
                 step="0.01"
                 value={av}
+                style={rangeStyle(av, 0.1, 10)}
                 onChange={handleSliderChange(setAv)}
               />
-              <span>{av.toFixed(2)}</span>
             </div>
-            <div>
-              <label htmlFor="b0">
-                <Latex>$b_0$</Latex>:{" "}
-              </label>
+            <div className="slider-control">
+              <div className="slider-label">
+                <label htmlFor="b0">
+                  <Latex>$b_0$</Latex>:
+                </label>
+                <span className="slider-value">{b0.toFixed(2)}</span>
+              </div>
               <input
                 type="range"
                 id="b0"
@@ -465,14 +541,17 @@ const ConsistentStrategies = () => {
                 max="2.0"
                 step="0.01"
                 value={b0}
+                style={rangeStyle(b0, 0.01, 2.0)}
                 onChange={handleSliderChange(setB0)}
               />
-              <span>{b0.toFixed(2)}</span>
             </div>
-            <div>
-              <label htmlFor="bv">
-                <Latex>$b_v$</Latex>:{" "}
-              </label>
+            <div className="slider-control">
+              <div className="slider-label">
+                <label htmlFor="bv">
+                  <Latex>$b_v$</Latex>:
+                </label>
+                <span className="slider-value">{bv.toFixed(2)}</span>
+              </div>
               <input
                 type="range"
                 id="bv"
@@ -480,9 +559,9 @@ const ConsistentStrategies = () => {
                 max="10"
                 step="0.01"
                 value={bv}
+                style={rangeStyle(bv, 0.1, 10)}
                 onChange={handleSliderChange(setBv)}
               />
-              <span>{bv.toFixed(2)}</span>
             </div>
           </div>
         </div>

@@ -67,3 +67,5 @@ yarn-error.log
 .pnp.js
 # Yarn Integrity file
 .yarn-integrity
+ALT_PATH_REVERT.md
+scripts/derive_polynomials.py

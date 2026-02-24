@@ -3,18 +3,20 @@
   "private": false,
   "description": "Does universalization ethics justify participation in large elections? - Bonus Content",
   "version": "1.0.0",
-  "author": "Konrad Dierks <konrad.dierks@googlemail.com>",
+  "author": "Konrad Dierks <konrad.dierks@ecomail.fr>",
   "dependencies": {
+    "@fontsource-variable/source-sans-3": "^5.0.0",
+    "@fontsource/libertinus-serif": "^5.2.1",
+    "@loadable/component": "^5.16.4",
+    "@sanity/icons": "^3.7.4",
     "flo-poly": "^7.0.0",
-    "gatsby": "^5.14.1",
+    "gatsby": "^5.16.1",
     "plotly.js": "^3.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-latex-next": "^3.0.0",
     "react-plotly.js": "^2.6.0",
-    "react-tabs": "^6.1.0",
-    "@fontsource-variable/source-sans-3": "^5.0.0",
-    "@loadable/component": "^5.16.4"
+    "react-tabs": "^6.1.0"
   },
   "devDependencies": {
     "gh-pages": "^6.3.0",
