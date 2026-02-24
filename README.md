@@ -1,4 +1,4 @@
-Source code for my personal page, [https://konraddierks.eu/](https://konraddierks.eu/).
+Source code for my personal page, [https://www.konraddierks.eu/](https://www.konraddierks.eu/).
 
 Includes the bonus content page to
 
