@@ -17,8 +17,8 @@ const AppendixPage = () => (
 export const Head = () => (
   <Seo
     title="Turnout Paper"
-    faviconLight="/favicon-turnout-light.svg"
-    faviconDark="/favicon-turnout-dark.svg"
+    faviconLight="/favicon-turnout-light-v2.svg"
+    faviconDark="/favicon-turnout-dark-v2.svg"
   />
 )
 
