@@ -11,8 +11,8 @@ const SiteFooter = () => (
       Source code:{" "}
       <span className="inline-link-with-icon">
         <GithubIcon className="link-icon" aria-hidden="true" />
-        <a href="https://github.com/konradecon/homo-moralis-turnout-appendix">
-          https://github.com/KonradEcon/homo-moralis-turnout-appendix
+        <a href="https://github.com/KonradEcon/personal-page">
+          https://github.com/KonradEcon/personal-page
         </a>
       </span>
     </p>
