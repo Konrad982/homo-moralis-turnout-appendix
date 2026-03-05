@@ -90,7 +90,7 @@ const AppendixTabs = ({ defaultTab = 0 }) => {
           <h2>Authors</h2>
           <p>
             <a href="https://ingelaalger.weebly.com/">Ingela Alger</a>,{" "}
-            <a href="https://konraddierks.eu/">
+            <a href="https://www.konraddierks.eu/">
               Konrad Dierks
             </a>
             ,{" "}
