@@ -9,14 +9,18 @@ const IndexPage = () => (
       <div className="home-text">
         <h1>Konrad Dierks</h1>
         <p>
-          Hi, I am a fifth-year PhD student in Environmental Economics at Toulouse School of Economics. My advisor is Christian Gollier.
+          Hi, I am a fifth-year PhD student in the Environmental Group at Toulouse School of Economics.
         </p>
         <h2>Research interests</h2>
         <p>
-          I mainly work on storage in a fully (or mostly) renewable electricity grid, using stochastic control in continuous time.
+          <b>Main: </b>Environmental Economics, Energy Economics
+          <br></br>
+          <b>Secondary: </b>Political Economics, Optimization Theory, Numerical Methods
         </p>
         <p>
-          I am also interested in optimization theory, numerical methods and political economics. 
+          Currently, my main project is on storage in a fully (or mostly) renewable electricity grid, using stochastic control in continuous time.
+        <br></br>
+           My advisor is Christian Gollier.
         </p>
       </div>
       <div className="home-photo" role="img" aria-label="Portrait placeholder">

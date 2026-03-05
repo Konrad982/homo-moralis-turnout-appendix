@@ -7,14 +7,11 @@ const ResearchPage = () => (
   <SiteLayout>
     <section>
       <h1>Research</h1>
-      <p>
-        My main research interest is storage for renewable energy in the electricity grid. I also worked on voting and I am interested in continuous-time optimization (stochastic control) and numerical methods.
-      </p>
     </section>
     <section className="research-list">
       <article className="research-item">
         <h2>Optimal storage capacity with intermittent wind energy</h2>
-        <p><i>Work in progress</i></p>
+        <h3><i>Work in progress</i></h3>
         <p>
           I study the optimal operation and capacity of grid-scale storage in a strongly wind-dominated electricity system with or without fossil backup. Wind generation follows a continuous-time stochastic process calibrated to German wind production data. A social planner with isoelastic preferences chooses charge and discharge rates to maximize intertemporal welfare subject to storage constraints. The model delivers a simple feedback policy and enables efficient numerical solution. Absent any fossil backup, the price elasticity of demand is a primary driver of the marginal value and optimal size of storage.
           <br />
@@ -32,6 +29,9 @@ const ResearchPage = () => (
       </article>
       <article className="research-item">
         <h2>Does universalization ethics justify participation in large elections?</h2>
+        <h3>
+          With Ingela Alger and Jean-François Laslier
+        </h3>
         <p>
           We analyze the turnout decisions of ethical voters, equipped with (semi-)Kantian preferences: a voter considers the election outcome that would arise if other voters behaved like him. The “others” can be limited to co-partisans (“partisan ethics”) or not (“non-partisan ethics”). In a standard model with two candidates, a known underdog, a continuum of voters, and a continuous power-sharing rule, we introduce two novel elements: core constituent groups, and distinct election stakes for the two partisan groups. Under partisan ethics, when an equilibrium exists, turnout is positive for both sides if the election is not of the winner-take-all kind. Under non-partisan ethics an equilibrium always exists and turnout is positive for one side only. There sometimes exist equilibria where the underdog wins. Moreover, multiple equilibria sometimes arise, possibly with different winners. Voters further face a coordination problem under equilibrium multiplicity in the non-partisan case.
         </p>

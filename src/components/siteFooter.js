@@ -15,8 +15,7 @@ const SiteFooter = () => (
           https://github.com/KonradEcon/personal-page
         </a>
       </span>
-    </p>
-    <p>
+    <br></br>
       The webpage icon "
       <a href="https://commons.wikimedia.org/w/index.php?curid=157180000">
         Arcticons-black emoji ballot box with ballot
@@ -29,12 +28,13 @@ const SiteFooter = () => (
         CC BY-SA 4.0{" "}
       </a>
       . Modified for greater line width. On dark browser theme: further modified for color inversion.
-    </p>
-    <p>
+    <br></br>
       Third party packages: <a href="/notice">Notice</a>
     </p>
     <p>
       Contact: <a href="mailto:konrad.dierks@ecomail.fr">konrad.dierks@ecomail.fr</a>
+    <br></br>
+      I acknowledge funding from the French National Research Agency under the EUR grant ANR-18-EURE-0021.
     </p>
   </footer>
 )

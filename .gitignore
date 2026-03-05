@@ -69,3 +69,4 @@ yarn-error.log
 .yarn-integrity
 ALT_PATH_REVERT.md
 scripts/derive_polynomials.py
+AGENTS.md
