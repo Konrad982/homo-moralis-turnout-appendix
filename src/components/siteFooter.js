@@ -1,7 +1,7 @@
 import * as React from "react"
 import { GithubIcon } from "@sanity/icons"
 
-const SiteFooter = () => (
+const SiteFooter = ({ usesTurnoutFavicon = false }) => (
   <footer className="site-footer">
     <p>
       © {new Date().getFullYear()} Konrad Dierks &middot; Hosted on GitHub Pages
@@ -15,20 +15,25 @@ const SiteFooter = () => (
           https://github.com/KonradEcon/personal-page
         </a>
       </span>
-    <br></br>
-      The webpage icon "
-      <a href="https://commons.wikimedia.org/w/index.php?curid=157180000">
-        Arcticons-black emoji ballot box with ballot
-      </a>
-      " by Arcticons Team is licensed under{" "}
-      <a
-        rel="noopener noreferrer"
-        href="https://creativecommons.org/licenses/by-sa/4.0/?ref=openverse"
-      >
-        CC BY-SA 4.0{" "}
-      </a>
-      . Modified for greater line width. On dark browser theme: further modified for color inversion.
-    <br></br>
+      <br></br>
+      {usesTurnoutFavicon ? (
+        <>
+          The webpage icon "
+          <a href="https://commons.wikimedia.org/w/index.php?curid=157180000">
+            Arcticons-black emoji ballot box with ballot
+          </a>
+          " by Arcticons Team is licensed under{" "}
+          <a
+            rel="noopener noreferrer"
+            href="https://creativecommons.org/licenses/by-sa/4.0/?ref=openverse"
+          >
+            CC BY-SA 4.0{" "}
+          </a>
+          . Modified for greater line width. On dark browser theme: further modified
+          for color inversion.
+          <br></br>
+        </>
+      ) : null}
       Third party packages: <a href="/notice">Notice</a>
     </p>
     <p>

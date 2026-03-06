@@ -3,13 +3,13 @@ import "./layout.css"
 import SiteNav from "./siteNav"
 import SiteFooter from "./siteFooter"
 
-const SiteLayout = ({ children }) => {
+const SiteLayout = ({ children, usesTurnoutFavicon = false }) => {
   return (
     <>
       <SiteNav />
       <div className="site-shell">
         <main>{children}</main>
-        <SiteFooter />
+        <SiteFooter usesTurnoutFavicon={usesTurnoutFavicon} />
       </div>
     </>
   )
