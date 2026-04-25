@@ -1,5 +1,8 @@
 import { allRoots } from "flo-poly"
 
+const EPSILON = 1e-9
+const LINE_TOLERANCE = 1.75
+
 const h = (x, m) => Math.atan(m * x) / Math.atan(m)
 
 const h_gamma = (x, gamma) =>
@@ -17,20 +20,447 @@ const utilityA = (m, cbar, kap, k, av, a, b, ai, a0) => {
   )
 }
 
-const findGroupBrAVecB = (m, cbar, kap, k, av, bVec, a0) => {
-  const x = new Array(10 * bVec.length).fill(0)
-  const y = new Array(10 * bVec.length).fill(0)
-  let count = 0
+const getMinStep = vec => {
+  if (vec.length < 2) {
+    return 1
+  }
 
-  for (let i = 0; i < bVec.length; i++) {
-    const brList = findGroupBrA(m, cbar, kap, k, av, bVec[i], a0)
-    for (let j = 0; j < brList.length; j++) {
-      x[count] = brList[j]
-      y[count] = bVec[i]
-      count++
+  let minStep = Infinity
+  for (let i = 1; i < vec.length; i++) {
+    const step = Math.abs(vec[i] - vec[i - 1])
+    if (step > EPSILON) {
+      minStep = Math.min(minStep, step)
     }
   }
-  return { x, y }
+
+  return Number.isFinite(minStep) ? minStep : 1
+}
+
+const dedupeNumeric = values => {
+  const sorted = [...values].sort((a, b) => a - b)
+  return sorted.filter(
+    (value, index) =>
+      index === 0 || Math.abs(value - sorted[index - 1]) > EPSILON
+  )
+}
+
+const solveQuadraticRealRoots = (quadA, quadB, quadC) => {
+  if (Math.abs(quadA) < EPSILON) {
+    if (Math.abs(quadB) < EPSILON) {
+      return []
+    }
+    return [-quadC / quadB]
+  }
+
+  const discriminant = quadB ** 2 - 4 * quadA * quadC
+  if (discriminant < -EPSILON) {
+    return []
+  }
+
+  const sqrtDiscriminant = Math.sqrt(Math.max(discriminant, 0))
+  return dedupeNumeric([
+    (-quadB + sqrtDiscriminant) / (2 * quadA),
+    (-quadB - sqrtDiscriminant) / (2 * quadA),
+  ])
+}
+
+const rootsAuxAFixedA = (m, cbar, kap, k, av, a, a0) => {
+  const aTilde = a - a0
+  const aPower = Math.abs(aTilde) < EPSILON ? 0 : aTilde ** k
+  const quadA = (1 + m ** 2) * cbar * aPower
+  const quadB =
+    2 * (1 - m ** 2) * a * cbar * aPower -
+    (2 * kap * m * av ** (k + 1)) / Math.atan(m)
+  const quadC = (1 + m ** 2) * cbar * aPower * a ** 2
+
+  return solveQuadraticRealRoots(quadA, quadB, quadC)
+}
+
+const scaledDistance = (first, second, xStep, yStep) => {
+  const dx = (first.x - second.x) / xStep
+  const dy = (first.y - second.y) / yStep
+  return Math.hypot(dx, dy)
+}
+
+const estimateCurveSteps = (points, xFallback, yFallback) => {
+  return {
+    xStep: Math.max(xFallback, 1e-12),
+    yStep: Math.max(yFallback, 1e-12),
+  }
+}
+
+const dedupePoints = (points, xStep, yStep) => {
+  const seen = new Map()
+  const dedupeX = Math.max(xStep / 2, 1e-12)
+  const dedupeY = Math.max(yStep / 2, 1e-12)
+  const minX = Math.min(...points.map(point => point.x))
+  const minY = Math.min(...points.map(point => point.y))
+
+  for (const point of points) {
+    const gridX = Math.round((point.x - minX) / dedupeX)
+    const gridY = Math.round((point.y - minY) / dedupeY)
+    const key = `${gridX}:${gridY}`
+
+    if (!seen.has(key)) {
+      seen.set(key, { ...point, gridX, gridY })
+    }
+  }
+
+  return [...seen.values()]
+}
+
+const buildAdjacency = (points, xStep, yStep, tolerance) => {
+  const adjacency = points.map(() => [])
+  if (points.length <= 1) {
+    return adjacency
+  }
+
+  const xTolerance = tolerance * xStep
+  const yTolerance = tolerance * yStep
+  const sorted = points
+    .map((point, index) => ({ point, index }))
+    .sort((first, second) => first.point.x - second.point.x)
+
+  for (let position = 0; position < sorted.length; position++) {
+    const { point, index } = sorted[position]
+
+    for (
+      let nextPosition = position + 1;
+      nextPosition < sorted.length;
+      nextPosition++
+    ) {
+      const { point: neighborPoint, index: neighborIndex } =
+        sorted[nextPosition]
+
+      if (neighborPoint.x - point.x > xTolerance) {
+        break
+      }
+
+      if (Math.abs(neighborPoint.y - point.y) > yTolerance) {
+        continue
+      }
+
+      const xScaled = (neighborPoint.x - point.x) / Math.max(xStep, 1e-12)
+      const yScaled =
+        Math.abs(neighborPoint.y - point.y) / Math.max(yStep, 1e-12)
+      if (xScaled ** 2 + yScaled ** 2 <= 7.5) {
+        adjacency[index].push(neighborIndex)
+        adjacency[neighborIndex].push(index)
+      }
+    }
+  }
+
+  return adjacency
+}
+
+const findConnectedComponents = adjacency => {
+  const visited = new Array(adjacency.length).fill(false)
+  const components = []
+
+  for (let start = 0; start < adjacency.length; start++) {
+    if (visited[start]) {
+      continue
+    }
+
+    const stack = [start]
+    const component = []
+    visited[start] = true
+
+    while (stack.length > 0) {
+      const current = stack.pop()
+      component.push(current)
+
+      for (const neighbor of adjacency[current]) {
+        if (!visited[neighbor]) {
+          visited[neighbor] = true
+          stack.push(neighbor)
+        }
+      }
+    }
+
+    components.push(component)
+  }
+
+  return components
+}
+
+const buildComponentAdjacency = (component, adjacency) => {
+  const indexMap = new Map(component.map((value, index) => [value, index]))
+
+  return component.map(pointIndex => {
+    return adjacency[pointIndex]
+      .filter(neighbor => indexMap.has(neighbor))
+      .map(neighbor => indexMap.get(neighbor))
+  })
+}
+
+const buildMinimumSpanningTree = (points, adjacency, xStep, yStep) => {
+  if (points.length <= 1) {
+    return []
+  }
+
+  const visited = new Set([0])
+  const edges = []
+
+  while (visited.size < points.length) {
+    let bestEdge = null
+    let bestWeight = Infinity
+
+    for (const node of visited) {
+      for (const neighbor of adjacency[node]) {
+        if (visited.has(neighbor)) {
+          continue
+        }
+
+        const weight = scaledDistance(
+          points[node],
+          points[neighbor],
+          xStep,
+          yStep
+        )
+        if (weight < bestWeight) {
+          bestWeight = weight
+          bestEdge = [node, neighbor]
+        }
+      }
+    }
+
+    if (bestEdge === null) {
+      return []
+    }
+
+    edges.push(bestEdge)
+    visited.add(bestEdge[1])
+  }
+
+  return edges
+}
+
+const orderLinePoints = (points, edges) => {
+  if (points.length === 1) {
+    return points
+  }
+
+  const adjacency = points.map(() => [])
+  edges.forEach(([from, to]) => {
+    adjacency[from].push(to)
+    adjacency[to].push(from)
+  })
+
+  const endpoints = adjacency
+    .map((neighbors, index) => ({ index, degree: neighbors.length }))
+    .filter(node => node.degree === 1)
+
+  if (endpoints.length !== 2) {
+    return null
+  }
+
+  const ordered = []
+  let current = endpoints[0].index
+  let previous = -1
+
+  while (current !== -1) {
+    ordered.push(points[current])
+    const next = adjacency[current].find(neighbor => neighbor !== previous)
+    previous = current
+    current = next ?? -1
+  }
+
+  return ordered.length === points.length ? ordered : null
+}
+
+const buildTreeAdjacency = (points, edges) => {
+  const adjacency = points.map(() => [])
+  edges.forEach(([from, to]) => {
+    adjacency[from].push(to)
+    adjacency[to].push(from)
+  })
+  return adjacency
+}
+
+const decomposeComponentPaths = (points, edges) => {
+  if (points.length === 0) {
+    return { lines: [], scatter: [] }
+  }
+
+  const treeAdjacency = buildTreeAdjacency(points, edges)
+  const degrees = treeAdjacency.map(neighbors => neighbors.length)
+  const ordered = orderLinePoints(points, edges)
+  if (ordered !== null) {
+    return {
+      lines: [ordered],
+      scatter: [],
+    }
+  }
+
+  const specialNodes = degrees
+    .map((degree, index) => ({ degree, index }))
+    .filter(node => node.degree !== 2)
+    .map(node => node.index)
+
+  if (specialNodes.length === 0) {
+    return { lines: [], scatter: points }
+  }
+
+  const lines = []
+  const usedEdges = new Set()
+  for (const start of specialNodes) {
+    for (const neighbor of treeAdjacency[start]) {
+      const edgeKey = [start, neighbor].sort((a, b) => a - b).join(":")
+      if (usedEdges.has(edgeKey)) {
+        continue
+      }
+
+      const path = [start, neighbor]
+      usedEdges.add(edgeKey)
+      let previous = start
+      let current = neighbor
+
+      while (degrees[current] === 2) {
+        const nextNodes = treeAdjacency[current].filter(
+          node => node !== previous
+        )
+        if (nextNodes.length !== 1) {
+          break
+        }
+
+        const next = nextNodes[0]
+        const nextEdgeKey = [current, next].sort((a, b) => a - b).join(":")
+        if (usedEdges.has(nextEdgeKey)) {
+          break
+        }
+
+        path.push(next)
+        usedEdges.add(nextEdgeKey)
+        previous = current
+        current = next
+      }
+
+      if (path.length >= 2) {
+        lines.push(path.map(index => points[index]))
+      }
+    }
+  }
+
+  const covered = new Set(lines.flatMap(line => line))
+  const scatter = points.filter(
+    (point, index) => degrees[index] > 2 || !covered.has(point)
+  )
+
+  return { lines, scatter }
+}
+
+const classifyPointCloud = (points, xStep, yStep) => {
+  const estimatedSteps = estimateCurveSteps(points, xStep, yStep)
+  const deduped = dedupePoints(
+    points,
+    estimatedSteps.xStep,
+    estimatedSteps.yStep
+  )
+  if (deduped.length === 0) {
+    return { x: [], y: [], scatter: { x: [], y: [] }, lines: [] }
+  }
+
+  const adjacency = buildAdjacency(
+    deduped,
+    estimatedSteps.xStep,
+    estimatedSteps.yStep,
+    LINE_TOLERANCE
+  )
+  const components = findConnectedComponents(adjacency)
+  const lines = []
+  const scatter = []
+
+  for (const component of components) {
+    const componentPoints = component.map(index => deduped[index])
+    if (componentPoints.length < 2) {
+      scatter.push(...componentPoints)
+      continue
+    }
+
+    const componentAdjacency = buildComponentAdjacency(component, adjacency)
+
+    const edges = buildMinimumSpanningTree(
+      componentPoints,
+      componentAdjacency,
+      estimatedSteps.xStep,
+      estimatedSteps.yStep
+    )
+
+    if (edges.length === 0) {
+      scatter.push(...componentPoints)
+      continue
+    }
+
+    const { lines: componentLines, scatter: componentScatter } =
+      decomposeComponentPaths(componentPoints, edges)
+
+    for (const line of componentLines) {
+      if (line.length >= 2) {
+        lines.push({
+          x: line.map(point => point.x),
+          y: line.map(point => point.y),
+        })
+      }
+    }
+    scatter.push(...componentScatter)
+  }
+
+  return {
+    x: deduped.map(point => point.x),
+    y: deduped.map(point => point.y),
+    scatter: {
+      x: scatter.map(point => point.x),
+      y: scatter.map(point => point.y),
+    },
+    lines,
+  }
+}
+
+const findGroupBrAVecB = (m, cbar, kap, k, av, bVec, a0, reverseScan = {}) => {
+  const points = []
+
+  for (const b of bVec) {
+    const brList = findGroupBrA(m, cbar, kap, k, av, b, a0)
+    for (const a of brList) {
+      points.push({ x: a, y: b })
+    }
+  }
+
+  if (
+    Array.isArray(reverseScan.aVec) &&
+    reverseScan.aVec.length > 0 &&
+    Number.isFinite(reverseScan.bMin) &&
+    Number.isFinite(reverseScan.bMax)
+  ) {
+    for (let i = 1; i < reverseScan.aVec.length; i++) {
+      const a = reverseScan.aVec[i]
+      const brList = findGroupBrAFixedA(
+        m,
+        cbar,
+        kap,
+        k,
+        av,
+        a,
+        a0,
+        reverseScan.bMin,
+        reverseScan.bMax
+      )
+
+      for (const b of brList) {
+        points.push({ x: a, y: b })
+      }
+    }
+  }
+
+  const xStep = getMinStep(
+    Array.isArray(reverseScan.aVec) && reverseScan.aVec.length > 1
+      ? reverseScan.aVec
+      : [a0, a0 + av]
+  )
+  const yStep = getMinStep(bVec)
+
+  return classifyPointCloud(points, xStep, yStep)
 }
 
 const findGroupBrA = (m, cbar, kap, k, av, b, a0) => {
@@ -57,7 +487,7 @@ const isGroupBrA = (roots, m, cbar, kap, k, av, b, a0) => {
         Math.abs(root - roots[i]) < Math.abs(rootsU[minIndex] - roots[i])
           ? index
           : minIndex,
-      0,
+      0
     )
     const indexMax = rootsU.reduce(
       (maxIndex, root, index) =>
@@ -65,13 +495,21 @@ const isGroupBrA = (roots, m, cbar, kap, k, av, b, a0) => {
         utilityA(m, cbar, kap, k, av, roots[i], b, rootsU[maxIndex], a0)
           ? index
           : maxIndex,
-      0,
+      0
     )
     if (indexMax === indexRoot) {
       tfArray[i] = true
     }
   }
   return tfArray
+}
+
+const findGroupBrAFixedA = (m, cbar, kap, k, av, a, a0, bMin, bMax) => {
+  let roots = rootsAuxAFixedA(m, cbar, kap, k, av, a, a0)
+  roots = roots.filter(root => root >= bMin - EPSILON)
+  roots = roots.filter(root => root <= bMax + EPSILON)
+
+  return roots.filter(b => isGroupBrA([a], m, cbar, kap, k, av, b, a0)[0])
 }
 
 const rootsAuxA = (m, cbar, kap, k, av, b, a0) => {
@@ -130,9 +568,42 @@ const rootsUtilityA = (m, cbar, kap, k, av, a, b, a0) => {
   return allRoots(coeffs).map(root => root + a0)
 }
 
-export {
-  findGroupBrAVecB,
-  h,
-  CostFun,
-  h_gamma,
+const swapPlotData = plotData => ({
+  x: plotData.y,
+  y: plotData.x,
+  scatter: {
+    x: plotData.scatter.y,
+    y: plotData.scatter.x,
+  },
+  lines: plotData.lines.map(line => ({ x: line.y, y: line.x })),
+})
+
+const computeConsistentStrategyData = params => {
+  const { m, theA, theB, rho, kap, k, a0, av, b0, bv, resolution } = params
+
+  const bVec = Array.from(
+    { length: resolution },
+    (_, i) => b0 + (i * bv) / Math.max(resolution - 1, 1)
+  )
+  const aVec = Array.from(
+    { length: resolution },
+    (_, i) => a0 + (i * av) / Math.max(resolution - 1, 1)
+  )
+
+  const data = findGroupBrAVecB(m, theA, kap, k, av, bVec, a0, {
+    aVec,
+    bMin: b0,
+    bMax: b0 + bv,
+  })
+  const data2 = swapPlotData(
+    findGroupBrAVecB(m, theB / rho, kap, k, bv, aVec, b0, {
+      aVec: bVec,
+      bMin: a0,
+      bMax: a0 + av,
+    })
+  )
+
+  return { data, data2 }
 }
+
+export { computeConsistentStrategyData, findGroupBrAVecB, h, CostFun, h_gamma }

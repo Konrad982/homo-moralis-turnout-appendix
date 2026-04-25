@@ -1,11 +1,82 @@
 import Plot from "./LoadablePlot.js"
 import React, { useState, useEffect } from "react"
-import { findGroupBrAVecB, h, CostFun } from "./Utils.js"
+import { computeConsistentStrategyData, h, CostFun } from "./Utils.js"
 import Latex from "react-latex-next"
 import "katex/dist/katex.min.css"
 import usePrefersDark from "./usePrefersDark"
 
 const ConsistentStrategies = () => {
+  const emptyStrategyData = {
+    x: [],
+    y: [],
+    scatter: { x: [], y: [] },
+    lines: [],
+  }
+
+  const buildStrategyTraces = (
+    plotData,
+    name,
+    color,
+    legendGroup,
+    useLineRendering
+  ) => {
+    const traces = [
+      {
+        x: [null],
+        y: [null],
+        type: "scatter",
+        name,
+        mode: "lines",
+        line: { color, width: 2 },
+        showlegend: true,
+        legendgroup: legendGroup,
+        hoverinfo: "skip",
+      },
+    ]
+
+    if (!useLineRendering) {
+      traces.push({
+        x: plotData.x,
+        y: plotData.y,
+        type: "scatter",
+        name,
+        mode: "markers",
+        marker: { size: 4, color },
+        showlegend: false,
+        legendgroup: legendGroup,
+      })
+      return traces
+    }
+
+    plotData.lines.forEach(line => {
+      traces.push({
+        x: line.x,
+        y: line.y,
+        type: "scatter",
+        name,
+        mode: "lines",
+        line: { color, width: 2 },
+        showlegend: false,
+        legendgroup: legendGroup,
+      })
+    })
+
+    if (plotData.scatter.x.length > 0) {
+      traces.push({
+        x: plotData.scatter.x,
+        y: plotData.scatter.y,
+        type: "scatter",
+        name,
+        mode: "markers",
+        marker: { size: 2, color },
+        showlegend: false,
+        legendgroup: legendGroup,
+      })
+    }
+
+    return traces
+  }
+
   const [m, setM] = useState(1)
   const [theA, setTheA] = useState(1)
   const [theB, setTheB] = useState(1)
@@ -16,10 +87,15 @@ const ConsistentStrategies = () => {
   const [av, setAv] = useState(1)
   const [b0, setB0] = useState(0.6)
   const [bv, setBv] = useState(0.6)
-  const [data, setData] = useState({ x: [], y: [] })
-  const [data2, setData2] = useState({ x: [], y: [] })
+  const [data, setData] = useState(emptyStrategyData)
+  const [data2, setData2] = useState(emptyStrategyData)
+  const [showRefinedStrategies, setShowRefinedStrategies] = useState(false)
   const [abline, setAbline] = useState({ x: [], y: [] })
-  const [isHorizontal, setIsHorizontal] = useState(typeof window === 'undefined' ? true : window.innerWidth > window.innerHeight)
+  const [isHorizontal, setIsHorizontal] = useState(
+    typeof window === "undefined"
+      ? true
+      : window.innerWidth > window.innerHeight
+  )
   const [benefit, setBenefit] = useState({ x: [], y: [] })
   const [cost, setCost] = useState({ x: [], y: [] })
   const [CDF, setCDF] = useState({ x: [], y: [] })
@@ -35,45 +111,43 @@ const ConsistentStrategies = () => {
   }, [a0, av, b0, bv])
 
   useEffect(() => {
-    const calculateData = useRefined => {
-      const highres = 3000
-      const Bvec = Array.from(
-        { length: useRefined ? highres : 200 },
-        (_, i) => b0 + (i * bv) / (useRefined ? highres - 1 : 199),
-      )
-      const Avec = Array.from(
-        { length: useRefined ? highres : 200 },
-        (_, i) => a0 + (i * av) / (useRefined ? highres - 1 : 199),
-      )
+    const coarseData = computeConsistentStrategyData({
+      m,
+      theA,
+      theB,
+      rho,
+      kap,
+      k,
+      a0,
+      av,
+      b0,
+      bv,
+      resolution: 30,
+    })
 
-      const newData = findGroupBrAVecB(m, theA, kap, k, av, Bvec, a0)
-      const newData2 = findGroupBrAVecB(m, theB / rho, kap, k, bv, Avec, b0)
-      newData.x = newData.x.slice(
-        0,
-        newData.x.findIndex((val, idx) => val === 0 && newData.y[idx] === 0),
-      )
-      newData.y = newData.y.slice(
-        0,
-        newData.y.findIndex((val, idx) => val === 0 && newData.x[idx] === 0),
-      )
-      newData2.x = newData2.x.slice(
-        0,
-        newData2.x.findIndex((val, idx) => val === 0 && newData2.y[idx] === 0),
-      )
-      newData2.y = newData2.y.slice(
-        0,
-        newData2.y.findIndex((val, idx) => val === 0 && newData2.x[idx] === 0),
-      )
-
-      setData(newData)
-      setData2(newData2)
-    }
-
-    calculateData(false)
+    setData(coarseData.data)
+    setData2(coarseData.data2)
+    setShowRefinedStrategies(false)
 
     const timeoutId = setTimeout(() => {
-      calculateData(true)
-    }, 500)
+      const refinedData = computeConsistentStrategyData({
+        m,
+        theA,
+        theB,
+        rho,
+        kap,
+        k,
+        a0,
+        av,
+        b0,
+        bv,
+        resolution: 1000,
+      })
+
+      setData(refinedData.data)
+      setData2(refinedData.data2)
+      setShowRefinedStrategies(true)
+    }, 200)
 
     return () => clearTimeout(timeoutId)
   }, [m, theA, kap, a0, av, b0, bv, theB, rho, k])
@@ -121,10 +195,9 @@ const ConsistentStrategies = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (typeof window === 'undefined') {
-        setIsHorizontal(true);
-      }
-      else {
+      if (typeof window === "undefined") {
+        setIsHorizontal(true)
+      } else {
         setIsHorizontal(window.innerWidth > window.innerHeight)
       }
     }
@@ -258,6 +331,7 @@ const ConsistentStrategies = () => {
         },
     xaxis: {
       ...axisBase,
+      range: [a0 - 0.0025 * av, a0 + 1.0025 * av],
       title: {
         ...axisBase.title,
         text: "a",
@@ -265,6 +339,7 @@ const ConsistentStrategies = () => {
     },
     yaxis: {
       ...axisBase,
+      range: [b0 - 0.0025 * bv, b0 + 1.0025 * bv],
       title: {
         ...axisBase.title,
         text: "b",
@@ -277,46 +352,20 @@ const ConsistentStrategies = () => {
   }
 
   const traces = [
-    {
-      x: data.x,
-      y: data.y,
-      type: "scatter",
-      name: "A-consistent strategies",
-      mode: "markers",
-      marker: { size: 1, color: plotTheme.traceA },
-      showlegend: false,
-      legendgroup: "Polynomial",
-    },
-    {
-      x: data2.y,
-      y: data2.x,
-      type: "scatter",
-      name: "B-consistent strategies",
-      mode: "markers",
-      marker: { size: 1, color: plotTheme.traceB },
-      showlegend: false,
-      legendgroup: "Polynomial 2",
-    },
-    {
-      x: [data2.y[0]],
-      y: [data2.x[0]],
-      type: "scatter",
-      name: "B-consistent",
-      mode: "lines",
-      marker: { size: 1, color: plotTheme.traceB },
-      showlegend: true,
-      legendgroup: "Polynomial 2",
-    },
-    {
-      x: [data.x[0]],
-      y: [data.y[0]],
-      type: "scatter",
-      name: "A-consistent",
-      mode: "lines",
-      marker: { size: 1, color: plotTheme.traceA },
-      showlegend: true,
-      legendgroup: "Polynomial",
-    },
+    ...buildStrategyTraces(
+      data,
+      "A-consistent strategies",
+      plotTheme.traceA,
+      "Polynomial",
+      showRefinedStrategies
+    ),
+    ...buildStrategyTraces(
+      data2,
+      "B-consistent strategies",
+      plotTheme.traceB,
+      "Polynomial 2",
+      showRefinedStrategies
+    ),
     {
       x: abline.x,
       y: abline.y,
