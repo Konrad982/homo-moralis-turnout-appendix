@@ -71,7 +71,7 @@ const AppendixTabs = ({ defaultTab = 0 }) => {
             <br />
             <span className="inline-link-with-icon">
               <GithubIcon className="link-icon" aria-hidden="true" />
-              <a href="https://github.com/KonradEcon/homo-moralis-turnout">
+              <a href="https://github.com/konrad-dierks/homo-moralis-turnout">
                 GitHub repository
               </a>
             </span>

@@ -11,8 +11,8 @@ const SiteFooter = ({ usesTurnoutFavicon = false }) => (
       Source code:{" "}
       <span className="inline-link-with-icon">
         <GithubIcon className="link-icon" aria-hidden="true" />
-        <a href="https://github.com/KonradEcon/personal-page">
-          https://github.com/KonradEcon/personal-page
+        <a href="https://github.com/konrad-dierks/personal-page">
+          https://github.com/konrad-dierks/personal-page
         </a>
       </span>
       <br></br>

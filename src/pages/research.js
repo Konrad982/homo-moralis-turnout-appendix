@@ -37,7 +37,7 @@ const ResearchPage = () => (
         </p>
         <p>
           <b>Links:</b> <a href="/turnout-paper/">Bonus content</a> ·{" "}
-          <a href="https://github.com/KonradEcon/homo-moralis-turnout">
+          <a href="https://github.com/konrad-dierks/homo-moralis-turnout">
             GitHub repository
           </a>{" "}
           ·{" "}
