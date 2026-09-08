@@ -10,21 +10,19 @@ const ResearchPage = () => (
     </section>
     <section className="research-list">
       <article className="research-item">
-        <h2>Optimal storage capacity with intermittent wind energy</h2>
+        <h2>Is a 100% renewable electricity mix viable and cost-efficient under weather uncertainty?</h2>
         <h3><i>Work in progress</i></h3>
         <p>
-          I study the optimal operation and capacity of grid-scale storage in a strongly wind-dominated electricity system with or without fossil backup. Wind generation follows a continuous-time stochastic process calibrated to German wind production data. A social planner with isoelastic preferences chooses charge and discharge rates to maximize intertemporal welfare subject to storage constraints. The model delivers a simple feedback policy and enables efficient numerical solution. Absent any fossil backup, the price elasticity of demand is a primary driver of the marginal value and optimal size of storage.
-          <br />
-          An optimal wind-plus-batteries system without backup in Germany features more than ten times the 2023 installed wind capacity and storage energy covering hours to days of average German demand, with a levelized cost of more than twice current wholesale electricity prices. By contrast, an optimal wind-plus-hydrogen system features less extreme wind capacities and storage energy covering weeks to months of average demand, despite storage losses. The wind-plus-hydrogen levelized cost is well below gas or coal levels when discounting with 2% annually. A deterministic benchmark confirms the first-order relevance of uncertain wind output: storage needs are driven by the risk of prolonged low-wind spells. Hydrogen's far lower energy capacity cost dominates efficiency losses and power capacity costs in this setting.
-          <br />
-          Allowing for a fossil backup sharply reduces optimal storage. Marginal abatement costs are initially negative, then spike when near zero emissions: it is very costly to avoid using an already present fossil backup even in the rarest events of prolonged low renewable production.
+          I propose a dynamic stochastic model to characterize the socially efficient mix of solar and wind electric generation and battery and hydrogen storage capacities under weather uncertainty, with and without the possibility of a fossil fuel backup. The welfare function accounts for both flexible consumption and demand curtailment. I solve a two-stage problem: the optimal management of the mix under weather uncertainty allows me to quantify the social value of its components. Performing this numerically complex measure for a wide variety of mixes, this then allows me to determine the efficient electricity mix. Without hydrogen, a 100% renewable mix is expensive (185 €/MWh). In spite of its low energy efficiency, allowing for hydrogen reduces the optimal renewable capacities sharply and reduces the levelized cost of electricity to 109 €/MWh. However, without fossil backup, the efficient mix is such that large amounts of electricity are produced with near-zero marginal value in many states. With a fossil backup, a non-negligible storage capacity only becomes optimal at a positive carbon price and marginal abatement costs rise sharply close to zero emissions.
         </p>
         <p>
-          <b>Links:</b> Coming soon.
+          <b>Draft available on request.</b>
           <br />
           <b>Presented at (selection):</b>
           <br />
-          2025: EAERE conference (Bergen), FAERE conference (Nantes), ENTER Jamboree (Stockholm), UAB (Barcelona, ENTER exchange seminar), University of Leipzig (Lunchtime seminar).
+          2025: EAERE conference (Bergen), FAERE conference (Nantes), ENTER Jamboree (Stockholm), UAB (Barcelona, ENTER exchange seminar), University of Leipzig lunchtime seminar.
+          <br />
+          2026: EDF (Paris), Doctorissimes (Paris), HYRCE (Liège), EEA-ESEM Conference (Dublin), IAEE European Conference (Munich)
         </p>
       </article>
       <article className="research-item">
