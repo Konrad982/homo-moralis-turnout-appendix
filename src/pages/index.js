@@ -18,7 +18,7 @@ const IndexPage = () => (
           <b>Secondary: </b>Political Economics, Optimization Theory, Numerical Methods
         </p>
         <p>
-          Currently, my main project is on storage in a fully (or mostly) renewable electricity grid, using stochastic control in continuous time.
+          My <a href="/research">main project</a> and upcoming job market paper is about the viability and cost efficiency of a fully renewable electricity mix under weather uncertainty in Germany.
         <br></br>
            My advisor is Christian Gollier.
         </p>
