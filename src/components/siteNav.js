@@ -5,9 +5,6 @@ import { MoonIcon, SunIcon } from "@sanity/icons"
 import "./layout.css"
 
 const NAV_FIT_EPSILON = 1
-const CONTENT_MAX_WIDTH_REM = 64
-const SIDE_NAV_WIDTH_PX = 260
-const SIDE_NAV_GAP_PX = 24
 const SIDE_NAV_ENTER_BUFFER_PX = 8
 const SIDE_NAV_EXIT_BUFFER_PX = 8
 
@@ -55,13 +52,24 @@ const SiteNav = () => {
     const nextIsPortrait = !isLandscape
     setIsPortrait(nextIsPortrait)
 
-    const rootFontSizePx =
-      Number.parseFloat(
-        window.getComputedStyle(document.documentElement).fontSize || "",
-      ) || 16
-    const contentOuterWidth = CONTENT_MAX_WIDTH_REM * rootFontSizePx
-    const remainingWidth = window.innerWidth - contentOuterWidth
-    const sideNavBaseThreshold = SIDE_NAV_WIDTH_PX + SIDE_NAV_GAP_PX
+    const shell = document.querySelector(".site-shell")
+    if (!shell) {
+      return
+    }
+
+    const root = document.documentElement
+    const rootStyle = window.getComputedStyle(root)
+    const shellStyle = window.getComputedStyle(shell)
+    // Use the full text width, independent of the current navigation mode.
+    // Both outer margins and the shell's horizontal padding are available.
+    const contentWidth =
+      Number.parseFloat(shellStyle.maxWidth) -
+      Number.parseFloat(shellStyle.paddingLeft) -
+      Number.parseFloat(shellStyle.paddingRight)
+    const remainingWidth = root.clientWidth - contentWidth
+    const sideNavBaseThreshold =
+      Number.parseFloat(rootStyle.getPropertyValue("--side-nav-width")) +
+      Number.parseFloat(rootStyle.getPropertyValue("--side-nav-gap"))
     const sideNavEnterThreshold = sideNavBaseThreshold + SIDE_NAV_ENTER_BUFFER_PX
     const sideNavExitThreshold = sideNavBaseThreshold - SIDE_NAV_EXIT_BUFFER_PX
     const canUseSideNav =

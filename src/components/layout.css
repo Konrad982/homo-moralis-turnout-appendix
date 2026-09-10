@@ -148,6 +148,12 @@ p {
   padding: var(--size-gutter);
 }
 
+:root[data-nav-mode="side"] .site-shell {
+  max-width: calc(var(--size-content) - 2 * var(--size-gutter));
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .site-nav-bar {
   position: sticky;
   top: 0;
@@ -961,6 +967,10 @@ p {
 
 .research-item h2 {
   margin-top: 0;
+}
+
+.research-funding {
+  font-size: 0.7em;
 }
 
 .cv-section {

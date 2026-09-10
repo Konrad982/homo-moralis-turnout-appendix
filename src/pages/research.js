@@ -24,6 +24,9 @@ const ResearchPage = () => (
           <br />
           2026: EDF (Paris), Doctorissimes (Paris), HYRCE (Liège), EEA-ESEM Conference (Dublin), IAEE European Conference (Munich)
         </p>
+        <p className="research-funding">
+          This work was supported by two French government grants managed by the Agence Nationale de la Recherche under the "Investissements d'avenir" program (references "ANR-18-EURE-0021", "ANR-21-ESRE-0051"). Under the latter, this work was granted access to the MesoNET resources center and the MesoNET Project under the allocation m26158.
+        </p>
       </article>
       <article className="research-item">
         <h2>Does universalization ethics justify participation in large elections?</h2>
@@ -48,6 +51,9 @@ const ResearchPage = () => (
           2025: QMUL Economics and Finance PhD workshop (London).
           <br />
           2024: EEA-ESEM Congress (Rotterdam), ESA European Meeting (Helsinki).
+        </p>
+        <p className="research-funding">
+          This work was by a French government grants managed by the Agence Nationale de la Recherche under the "Investissements d'avenir" program (reference "ANR-18-EURE-0021").
         </p>
       </article>
     </section>
